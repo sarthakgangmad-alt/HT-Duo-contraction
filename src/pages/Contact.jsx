@@ -43,7 +43,7 @@ export default function Contact() {
             setIsSubmitted(true);
         } catch (error) {
             console.error('Error submitting form:', error);
-            alert('Error submitting form. Please try again.');
+            alert(`Error submitting form: ${error.message || error}`);
             setIsSubmitting(false);
         }
     };
