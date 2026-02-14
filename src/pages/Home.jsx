@@ -1,40 +1,41 @@
 import { useState, useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowRight, ShieldCheck, Ruler, Clock, Star, Hammer, Layers, Layout, Home as HomeIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { LiquidMetalButton } from '../components/ui/LiquidMetal';
 import TestimonialCarousel from '../components/TestimonialCarousel';
 
 export default function Home() {
-    const containerRef = useRef(null);
     const [currentFrame, setCurrentFrame] = useState(1);
     const totalFrames = 151; // Using sequence-2 with 151 frames
 
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start start", "end end"]
-    });
+    // Auto-play Animation Loop
+    useEffect(() => {
+        let animationFrameId;
+        const interval = 50; // Speed control (~20fps)
+        let lastTime = 0;
 
-    // Map scroll progress (0 to 1) to frame number (1 to 151)
-    const frameIndex = useTransform(scrollYProgress, [0, 1], [1, totalFrames]);
+        const animate = (time) => {
+            if (time - lastTime >= interval) {
+                setCurrentFrame((prev) => (prev >= totalFrames ? 1 : prev + 1));
+                lastTime = time;
+            }
+            animationFrameId = requestAnimationFrame(animate);
+        };
+        animationFrameId = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(animationFrameId);
+    }, [totalFrames]);
 
-    useMotionValueEvent(frameIndex, "change", (latest) => {
-        const frame = Math.min(totalFrames, Math.max(1, Math.round(latest)));
-        if (frame !== currentFrame) {
-            setCurrentFrame(frame);
-        }
-    });
-
-    // Optional: Preload images for smoother playback
+    // Preload all images for smooth playback
     useEffect(() => {
         const preload = () => {
-            for (let i = 1; i <= Math.min(totalFrames, 50); i++) { // Preload first 50 to start
+            for (let i = 1; i <= totalFrames; i++) {
                 const img = new Image();
                 img.src = `/sequence-2/ezgif-frame-${String(i).padStart(3, '0')}.png`;
             }
         };
-        // Small delay to prioritize initial render
-        const timer = setTimeout(preload, 1000);
+        // Delay slightly to allow initial paint
+        const timer = setTimeout(preload, 500);
         return () => clearTimeout(timer);
     }, []);
 
@@ -45,66 +46,63 @@ export default function Home() {
 
     return (
         <div className="bg-white">
-            {/* Scroll Sequence Hero Section */}
-            {/* The container is tall (300vh) to allow scrolling, but content is sticky */}
-            <div ref={containerRef} className="relative h-[300vh] bg-black">
-                <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center">
-                    {/* Dynamic Background Image */}
-                    <div className="absolute inset-0 z-0">
-                        {/* Static First Frame (fallback/loading) */}
-                        <img
-                            src={getFramePath(1)}
-                            alt="Background"
-                            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${currentFrame === 1 ? 'opacity-100' : 'opacity-0'}`}
-                        />
-                        {/* Dynamic Frame */}
-                        <img
-                            src={getFramePath(currentFrame)}
-                            alt="Service Animation"
-                            className="absolute inset-0 w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#0F2B46]/95 via-[#0F2B46]/80 to-transparent z-10 mix-blend-multiply" />
-                    </div>
-
-                    <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-20">
-                        <motion.div
-                            initial={{ opacity: 0, y: 40 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
-                            className="max-w-4xl"
-                        >
-                            <div className="flex items-center space-x-3 text-[#C5A059] font-bold uppercase tracking-[0.2em] mb-8 text-sm md:text-base">
-                                <span className="w-16 h-0.5 bg-[#C5A059]"></span>
-                                <span>Premium Outdoor Living</span>
-                            </div>
-                            <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-white mb-8 tracking-tight leading-[1.1]">
-                                Building Excellence. <br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C5A059] to-[#E5C079]">
-                                    Crafting Luxury.
-                                </span>
-                            </h1>
-                            <p className="text-xl md:text-2xl text-slate-300 mb-12 max-w-2xl leading-relaxed font-light border-l-4 border-[#C5A059] pl-6">
-                                Premium Construction & Backyard Transformations in Ontario. We turn outdoor spaces into luxury retreats.
-                            </p>
-                            <div className="flex flex-col sm:flex-row gap-6">
-                                <Link to="/contact">
-                                    <LiquidMetalButton
-                                        size="lg"
-                                        icon={<ArrowRight className="w-5 h-5" />}
-                                        metalConfig={{ colorBack: '#C5A059', colorTint: '#E5C079' }}
-                                        className="font-bold uppercase tracking-wider"
-                                    >
-                                        Get a Free Quote
-                                    </LiquidMetalButton>
-                                </Link>
-                                <Link to="/portfolio" className="inline-flex items-center justify-center px-10 py-5 bg-transparent border-2 border-slate-500 text-white font-bold uppercase tracking-wider hover:bg-white hover:text-[#0F2B46] hover:border-white transition-all rounded-sm">
-                                    View Our Work
-                                </Link>
-                            </div>
-                        </motion.div>
-                    </div>
+            {/* Auto-Playing Hero Section */}
+            <section className="relative h-screen flex items-center bg-[#0F2B46] text-white overflow-hidden">
+                {/* Dynamic Background Image */}
+                <div className="absolute inset-0 z-0">
+                    {/* Fallback/First Frame */}
+                    <img
+                        src={getFramePath(1)}
+                        alt="Background"
+                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${currentFrame === 1 ? 'opacity-100' : 'opacity-0'}`}
+                    />
+                    {/* Animated Frame */}
+                    <img
+                        src={getFramePath(currentFrame)}
+                        alt="Service Animation"
+                        className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#0F2B46]/95 via-[#0F2B46]/80 to-transparent z-10 mix-blend-multiply" />
                 </div>
-            </div>
+
+                <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-20">
+                    <motion.div
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className="max-w-4xl"
+                    >
+                        <div className="flex items-center space-x-3 text-[#C5A059] font-bold uppercase tracking-[0.2em] mb-8 text-sm md:text-base">
+                            <span className="w-16 h-0.5 bg-[#C5A059]"></span>
+                            <span>Premium Outdoor Living</span>
+                        </div>
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-white mb-8 tracking-tight leading-[1.1]">
+                            Building Excellence. <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C5A059] to-[#E5C079]">
+                                Crafting Luxury.
+                            </span>
+                        </h1>
+                        <p className="text-xl md:text-2xl text-slate-300 mb-12 max-w-2xl leading-relaxed font-light border-l-4 border-[#C5A059] pl-6">
+                            Premium Construction & Backyard Transformations in Ontario. We turn outdoor spaces into luxury retreats.
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-6">
+                            <Link to="/contact">
+                                <LiquidMetalButton
+                                    size="lg"
+                                    icon={<ArrowRight className="w-5 h-5" />}
+                                    metalConfig={{ colorBack: '#C5A059', colorTint: '#E5C079' }}
+                                    className="font-bold uppercase tracking-wider"
+                                >
+                                    Get a Free Quote
+                                </LiquidMetalButton>
+                            </Link>
+                            <Link to="/portfolio" className="inline-flex items-center justify-center px-10 py-5 bg-transparent border-2 border-slate-500 text-white font-bold uppercase tracking-wider hover:bg-white hover:text-[#0F2B46] hover:border-white transition-all rounded-sm">
+                                View Our Work
+                            </Link>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
 
             {/* Introduction / About Snippet */}
             <section className="py-24 bg-white relative z-20">
