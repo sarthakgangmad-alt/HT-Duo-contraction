@@ -6,62 +6,144 @@ import { LiquidMetalButton } from '../components/ui/LiquidMetal';
 import TestimonialCarousel from '../components/TestimonialCarousel';
 
 export default function Home() {
-    const [currentFrame, setCurrentFrame] = useState(1);
-    const totalFrames = 151; // Using sequence-2 with 151 frames
+    const canvasRef = useRef(null);
+    const [imagesLoaded, setImagesLoaded] = useState(false);
+    const totalOriginalFrames = 151;
+    const frameStep = 2; // Skip every other frame to reduce load (75 frames total)
+    const frameInterval = 60; // Slightly slower to compensate for skipped frames (~16fps)
 
-    // Auto-play Animation Loop
+    // Store loaded images in a ref to avoid re-renders
+    const imagesCache = useRef([]);
+
+    // Preload Images
     useEffect(() => {
+        let isMounted = true;
+        const loadImages = async () => {
+            const promises = [];
+            // Generate list of frames to load (1, 3, 5, ...)
+            for (let i = 1; i <= totalOriginalFrames; i += frameStep) {
+                promises.push(new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.src = `/sequence-2/ezgif-frame-${String(i).padStart(3, '0')}.png`;
+                    img.onload = () => resolve({ index: i, img });
+                    img.onerror = () => resolve({ index: i, img: null }); // Don't fail all if one fails
+                }));
+            }
+
+            try {
+                const results = await Promise.all(promises);
+                if (!isMounted) return;
+
+                // Store in cache: key = frameIndex, value = img object
+                // We map loaded frames to a continuous array for easy looping
+                const loaded = results
+                    .filter(r => r.img !== null)
+                    .sort((a, b) => a.index - b.index)
+                    .map(r => r.img);
+
+                imagesCache.current = loaded;
+                setImagesLoaded(true);
+            } catch (err) {
+                console.error("Failed to load sequence", err);
+            }
+        };
+
+        loadImages();
+        return () => { isMounted = false; };
+    }, []);
+
+    // Animation Loop (Canvas)
+    useEffect(() => {
+        if (!imagesLoaded || imagesCache.current.length === 0) return;
+
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
         let animationFrameId;
-        const interval = 50; // Speed control (~20fps)
         let lastTime = 0;
+        let currentFrameIndex = 0; // Index in the REDUCED cache array
+
+        // Set canvas size to match first image (assuming consistant size)
+        // Or fit to container
+        const resizeCanvas = () => {
+            const parent = canvas.parentElement;
+            if (parent) {
+                canvas.width = parent.offsetWidth;
+                canvas.height = parent.offsetHeight;
+                // Draw current frame immediately after resize
+                drawFrame(currentFrameIndex);
+            }
+        };
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const drawFrame = (index) => {
+            const img = imagesCache.current[index];
+            if (!img) return;
+
+            // object-cover logic for canvas
+            const w = canvas.width;
+            const h = canvas.height;
+            const imgRatio = img.width / img.height;
+            const canvasRatio = w / h;
+
+            let drawW, drawH, curX, curY;
+            if (imgRatio > canvasRatio) {
+                drawH = h;
+                drawW = h * imgRatio;
+                curX = (w - drawW) / 2;
+                curY = 0;
+            } else {
+                drawW = w;
+                drawH = w / imgRatio;
+                curX = 0;
+                curY = (h - drawH) / 2;
+            }
+
+            ctx.drawImage(img, curX, curY, drawW, drawH);
+        };
 
         const animate = (time) => {
-            if (time - lastTime >= interval) {
-                setCurrentFrame((prev) => (prev >= totalFrames ? 1 : prev + 1));
+            if (time - lastTime >= frameInterval) {
+                currentFrameIndex = (currentFrameIndex + 1) % imagesCache.current.length;
+                drawFrame(currentFrameIndex);
                 lastTime = time;
             }
             animationFrameId = requestAnimationFrame(animate);
         };
+
         animationFrameId = requestAnimationFrame(animate);
-        return () => cancelAnimationFrame(animationFrameId);
-    }, [totalFrames]);
 
-    // Preload all images for smooth playback
-    useEffect(() => {
-        const preload = () => {
-            for (let i = 1; i <= totalFrames; i++) {
-                const img = new Image();
-                img.src = `/sequence-2/ezgif-frame-${String(i).padStart(3, '0')}.png`;
-            }
+        return () => {
+            cancelAnimationFrame(animationFrameId);
+            window.removeEventListener('resize', resizeCanvas);
         };
-        // Delay slightly to allow initial paint
-        const timer = setTimeout(preload, 500);
-        return () => clearTimeout(timer);
-    }, []);
-
-    const getFramePath = (frame) => {
-        const paddedIndex = String(frame).padStart(3, '0');
-        return `/sequence-2/ezgif-frame-${paddedIndex}.png`;
-    };
+    }, [imagesLoaded]);
 
     return (
         <div className="bg-white">
-            {/* Auto-Playing Hero Section */}
+            {/* Optimized Canvas Hero Section */}
             <section className="relative h-screen flex items-center bg-[#0F2B46] text-white overflow-hidden">
-                {/* Dynamic Background Image */}
-                <div className="absolute inset-0 z-0">
-                    {/* Fallback/First Frame */}
-                    <img
-                        src={getFramePath(1)}
-                        alt="Background"
-                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${currentFrame === 1 ? 'opacity-100' : 'opacity-0'}`}
+                <div className="absolute inset-0 z-0 bg-black">
+                    {/* 
+                       While loading, show static fallback (Frame 1).
+                       Once loaded, show Canvas.
+                     */}
+                    {!imagesLoaded && (
+                        <img
+                            src="/sequence-2/ezgif-frame-001.png"
+                            alt="Loading..."
+                            className="absolute inset-0 w-full h-full object-cover opacity-50 blur-sm transition-opacity duration-500"
+                        />
+                    )}
+
+                    <canvas
+                        ref={canvasRef}
+                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${imagesLoaded ? 'opacity-100' : 'opacity-0'}`}
                     />
-                    {/* Animated Frame */}
-                    <img
-                        src={getFramePath(currentFrame)}
-                        alt="Service Animation"
-                        className="absolute inset-0 w-full h-full object-cover"
-                    />
+
                     <div className="absolute inset-0 bg-gradient-to-r from-[#0F2B46]/95 via-[#0F2B46]/80 to-transparent z-10 mix-blend-multiply" />
                 </div>
 
@@ -220,3 +302,5 @@ export default function Home() {
         </div>
     );
 }
+
+// ... Additional Code (imports etc handled by write_to_file)
