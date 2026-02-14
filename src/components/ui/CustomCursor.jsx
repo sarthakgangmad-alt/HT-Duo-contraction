@@ -74,7 +74,7 @@ export default function CustomCursor() {
         <>
             {/* Main Ring */}
             <motion.div
-                className="fixed top-0 left-0 w-8 h-8 border border-stone-500 rounded-full pointer-events-none z-[9999] hidden md:block mix-blend-difference"
+                className="fixed top-0 left-0 w-8 h-8 border border-white rounded-full pointer-events-none z-[9999] hidden md:block mix-blend-difference"
                 variants={variants}
                 animate={isHovering ? "hover" : "default"}
                 transition={{

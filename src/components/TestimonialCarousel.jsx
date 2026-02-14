@@ -5,38 +5,31 @@ import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
 const testimonials = [
     {
         rating: "5.0",
-        title: "Absolutely Exceptional!",
-        text: "I’m beyond impressed with the level of professionalism and results delivered. Artina Contracting’s team truly understands what clients need and goes the extra mile at every step. The entire experience was seamless and impactful — highly recommended!",
-        name: "Richard H.",
-        role: "Senior Partner, Horizon Group"
-    },
-    {
-        rating: "4.9",
-        title: "Transformed Our Expectations!",
-        text: "Working with Artina Contracting exceeded all our expectations. Their insight, strategic execution, and unwavering support made the project run smoothly and efficiently. If you want quality, vision, and reliability — this is where you get it.",
-        name: "Amanda L.",
-        role: "Director of Operations"
+        title: "Outstanding Quality!",
+        text: "The quality of the work was outstanding. Very professional and easy to communicate with.",
+        name: "Karen",
+        role: "Homeowner"
     },
     {
         rating: "5.0",
-        title: "Unmatched Quality & Customer Focus",
-        text: "Artina Contracting’s commitment to excellence is obvious from day one. Their attention to detail, clear communication, and proactive problem-solving truly set them apart. We saw real value and measurable impact.",
-        name: "Marcus T.",
-        role: "Property Developer"
+        title: "Amazing Transformation",
+        text: "They upgraded our backyard and it looks amazing. Very professional team.",
+        name: "Athina Vio",
+        role: "Client"
     },
     {
-        rating: "4.8",
-        title: "Highly Professional & Results-Driven",
-        text: "From concept to completion, Artina Contracting delivered on every promise. The team is proactive, knowledgeable, and always available to guide us. We’re extremely satisfied with the outcome.",
-        name: "Jennifer W.",
-        role: "Project Lead"
+        rating: "5.0",
+        title: "Respectful and Skilled",
+        text: "Very happy with my project. The guys were respectful and loyal to their trade.",
+        name: "Vladimir Osipyan",
+        role: "Client"
     },
     {
-        rating: "4.9",
-        title: "Elevated Our Business Growth!",
-        text: "The expertise and support we received were outstanding. Artina Contracting helped us refine our strategy, optimize execution, and scale faster than expected. One of the best decisions we’ve made.",
-        name: "Robert C.",
-        role: "CEO, C-Corp"
+        rating: "5.0",
+        title: "Professional & Reliable",
+        text: "HT Duo Construction delivered exactly what was promised. The attention to detail and structural integrity is unmatched.",
+        name: "Michael T.",
+        role: "Property Manager"
     }
 ];
 
@@ -129,13 +122,13 @@ export default function TestimonialCarousel() {
                                 prevSlide();
                             }
                         }}
-                        className="absolute w-full max-w-2xl bg-stone-900/80 backdrop-blur-sm border border-stone-800 p-8 md:p-12 rounded-2xl shadow-xl cursor-grab active:cursor-grabbing text-center"
+                        className="absolute w-full max-w-2xl bg-[#0F2B46]/95 backdrop-blur-sm border border-[#1a3c5e] p-8 md:p-12 rounded-2xl shadow-xl cursor-grab active:cursor-grabbing text-center"
                     >
-                        <Quote className="text-orange-500/20 w-16 h-16 absolute top-8 left-8 -z-10" />
+                        <Quote className="text-[#C5A059]/20 w-16 h-16 absolute top-8 left-8 -z-10" />
 
                         <div className="flex justify-center space-x-1 mb-6">
                             {[...Array(5)].map((_, i) => (
-                                <Star key={i} fill="#f97316" className="text-orange-500 w-5 h-5" />
+                                <Star key={i} fill="#C5A059" className="text-[#C5A059] w-5 h-5" />
                             ))}
                         </div>
 
@@ -143,13 +136,13 @@ export default function TestimonialCarousel() {
                             {testimonials[currentIndex].title}
                         </h3>
 
-                        <p className="text-stone-300 text-lg md:text-xl leading-relaxed mb-8">
+                        <p className="text-slate-300 text-lg md:text-xl leading-relaxed mb-8">
                             "{testimonials[currentIndex].text}"
                         </p>
 
-                        <div className="border-t border-stone-800 pt-6 inline-block w-full">
+                        <div className="border-t border-[#1a3c5e] pt-6 inline-block w-full">
                             <h4 className="text-white font-bold text-lg">{testimonials[currentIndex].name}</h4>
-                            <p className="text-orange-500 font-medium text-sm tracking-wider uppercase">{testimonials[currentIndex].role}</p>
+                            <p className="text-[#C5A059] font-medium text-sm tracking-wider uppercase">{testimonials[currentIndex].role}</p>
                         </div>
                     </motion.div>
                 </AnimatePresence>
@@ -158,14 +151,14 @@ export default function TestimonialCarousel() {
             {/* Navigation Arrows */}
             <button
                 onClick={prevSlide}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-12 p-3 bg-stone-900 border border-stone-800 rounded-full text-stone-400 hover:text-white hover:border-orange-500 hover:bg-stone-800 transition-all z-10 hidden md:block"
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-12 p-3 bg-[#0F2B46] border border-[#1a3c5e] rounded-full text-slate-400 hover:text-white hover:border-[#C5A059] hover:bg-[#1a3c5e] transition-all z-10 hidden md:block"
                 aria-label="Previous testimonial"
             >
                 <ChevronLeft className="w-6 h-6" />
             </button>
             <button
                 onClick={nextSlide}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-12 p-3 bg-stone-900 border border-stone-800 rounded-full text-stone-400 hover:text-white hover:border-orange-500 hover:bg-stone-800 transition-all z-10 hidden md:block"
+                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-12 p-3 bg-[#0F2B46] border border-[#1a3c5e] rounded-full text-slate-400 hover:text-white hover:border-[#C5A059] hover:bg-[#1a3c5e] transition-all z-10 hidden md:block"
                 aria-label="Next testimonial"
             >
                 <ChevronRight className="w-6 h-6" />
@@ -178,8 +171,8 @@ export default function TestimonialCarousel() {
                         key={index}
                         onClick={() => goToSlide(index)}
                         className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex
-                                ? "bg-orange-500 w-8"
-                                : "bg-stone-700 hover:bg-stone-500"
+                            ? "bg-[#C5A059] w-8"
+                            : "bg-slate-700 hover:bg-slate-500"
                             }`}
                         aria-label={`Go to testimonial ${index + 1}`}
                     />

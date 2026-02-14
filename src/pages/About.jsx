@@ -1,215 +1,166 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle2, Ruler, HardHat, FileText, LayoutTemplate, ShieldCheck, Users, Clock } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Ruler, LayoutTemplate, ShieldCheck, Users, Clock, MapPin } from 'lucide-react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LiquidMetalButton } from '../components/ui/LiquidMetal';
 
+const coreValues = [
+    {
+        title: "Integrity",
+        icon: ShieldCheck,
+        description: "We build with honesty. No cut corners, just solid construction that stands the test of time.",
+        image: "https://images.unsplash.com/photo-1588854337221-4cf9fa96059c?q=80&w=2670&auto=format&fit=crop"
+    },
+    {
+        title: "Precision",
+        icon: Ruler,
+        description: "Attention to detail is our signature. From framing to finishing, everything is measured and exact.",
+        image: "https://images.unsplash.com/photo-1581094794329-cd11965d152a?q=80&w=2670&auto=format&fit=crop"
+    },
+    {
+        title: "Client Focus",
+        icon: Users,
+        description: "We work for you. Communication is constant, and your vision is our priority.",
+        image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2690&auto=format&fit=crop"
+    }
+];
+
 export default function About() {
-    const processSteps = [
-        {
-            id: 1,
-            title: 'Consultation & Feasibility',
-            desc: 'We begin by reviewing your vision, zoning requirements, and budget. We provide honest assessments of what is possible on your property before you spend a dollar on design.'
-        },
-        {
-            id: 2,
-            title: 'Design & Engineering',
-            desc: 'Our architectural team develops detailed plans while structural engineers ensure integrity. We handle all municipal zoning reviews and satisfy strict building code requirements.'
-        },
-        {
-            id: 3,
-            title: 'Permitting & Planning',
-            desc: 'We navigate the complex approvals process, securing necessary permits from the city. Simultaneously, we finalize a transparent construction schedule and budget.'
-        },
-        {
-            id: 4,
-            title: 'Construction Management',
-            desc: 'Your project is assigned a dedicated site supervisor. We coordinate trades, manage inspections, and execute the build with precision, keeping you updated weekly.'
-        },
-        {
-            id: 5,
-            title: 'Handover & Warranty',
-            desc: 'We conduct a thorough walkthrough to ensure every detail meets our standards. Upon completion, we provide full warranty documentation and project close-out files.'
-        }
-    ];
+    const [hoveredValue, setHoveredValue] = useState(null);
 
     return (
-        <div className="min-h-screen bg-white pt-20">
-            {/* Hero Section */}
-            <div className="relative h-[60vh] w-full overflow-hidden flex items-center justify-center">
-                <div className="absolute inset-0 bg-stone-900/50 z-10" />
-                <motion.img
-                    initial={{ scale: 1.1 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 1.5 }}
-                    src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2670&auto=format&fit=crop"
-                    alt="Structural Construction"
-                    className="absolute inset-0 w-full h-full object-cover"
-                />
-                <div className="relative z-20 text-center max-w-4xl px-4">
+        <div className="min-h-screen bg-white">
+            {/* Header */}
+            <div className="bg-[#0F2B46] text-white py-32 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay" />
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
                     <motion.h1
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-4xl md:text-6xl font-bold text-white mb-6"
-                    >
-                        Built on Accountability.
-                    </motion.h1>
-                    <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                        className="text-xl text-stone-200 font-light tracking-wide"
+                        className="text-5xl md:text-7xl font-bold mb-6"
                     >
-                        Leading the standard for design-build construction.
-                    </motion.p>
+                        About <span className="text-[#C5A059]">HT Duo</span>
+                    </motion.h1>
+                    <p className="text-xl text-slate-300 max-w-3xl mx-auto font-light">
+                        Premium Residential & Outdoor Construction in Ontario.
+                    </p>
                 </div>
             </div>
 
-            {/* Introduction Section */}
+            {/* Introduction */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
                     <div>
-                        <h4 className="text-orange-600 font-bold uppercase tracking-widest text-sm mb-4">Who We Are</h4>
-                        <h2 className="text-4xl font-bold text-stone-900 mb-6">Artina Contracting Inc</h2>
-                        <div className="space-y-6 text-stone-600 leading-relaxed text-lg">
+                        <h4 className="text-[#C5A059] font-bold uppercase tracking-widest text-sm mb-6">Our Story</h4>
+                        <h2 className="text-4xl font-bold text-[#0F2B46] mb-8 leading-tight">
+                            Building Trust Through Quality Craftsmanship
+                        </h2>
+                        <div className="space-y-6 text-slate-600 leading-relaxed text-lg">
                             <p>
-                                Artina Contracting Inc is a fully integrated design-build firm dedicated to complex residential and commercial projects. We move beyond the traditional fragmented construction model by taking full ownership of your project from the first sketch to the final inspection.
+                                <span className="font-bold text-[#0F2B46]">HT Duo Construction</span> is a premier construction firm based in Maple, Ontario.
+                                We specialize in high-end backend transformations, structural framing, and custom residential renovations.
                             </p>
                             <p>
-                                We are not a volume builder. We are technical specialists who thrive on structural challenges, permit-driven additions, and full-scale renovations that require precision engineering.
+                                Founded on the principles of integrity and precision, we treat every project—whether a deck, a patio, or a complete home addition—with the same level of care and professional oversight.
+                            </p>
+                            <p>
+                                Our goal is simple: to create outdoor and indoor living spaces that you will love for years to come.
                             </p>
                         </div>
                     </div>
-                    <div className="bg-stone-100 p-8 rounded-2xl border-l-4 border-orange-500">
-                        <h3 className="text-2xl font-bold text-stone-900 mb-6">Built For Serious Projects</h3>
-                        <p className="text-stone-600 mb-6">
-                            Our services are specifically designed for property owners who need:
-                        </p>
-                        <ul className="space-y-4">
+
+                    <div className="bg-slate-50 p-10 rounded-3xl border border-slate-100">
+                        <h3 className="text-2xl font-bold text-[#0F2B46] mb-8">Why Choose HT Duo?</h3>
+                        <ul className="space-y-6">
                             {[
-                                'Complete structural reconfiguration (Load-bearing wall removal)',
-                                'Home additions and second-story expansions',
-                                'Commercial interior fit-outs with strict code compliance',
-                                'Permit-heavy projects requiring architectural stamps'
+                                'Specialized in Luxury Outdoor Living',
+                                'Structural Integrity Guarantee',
+                                'Transparent Pricing & Timelines',
+                                'Fully Licensed & Insured Team',
+                                'Serving Maple, Vaughan & GTA'
                             ].map((item, i) => (
-                                <li key={i} className="flex items-start">
-                                    <CheckCircle2 className="text-orange-500 mr-3 mt-1 flex-shrink-0" size={20} />
-                                    <span className="text-stone-800 font-medium">{item}</span>
+                                <li key={i} className="flex items-center">
+                                    <CheckCircle2 className="text-[#C5A059] mr-4 flex-shrink-0" size={24} />
+                                    <span className="text-slate-800 font-semibold text-lg">{item}</span>
                                 </li>
                             ))}
                         </ul>
+
+                        <div className="mt-10 pt-10 border-t border-slate-200">
+                            <div className="flex items-center space-x-4">
+                                <MapPin className="text-[#C5A059] flex-shrink-0" size={24} />
+                                <div className="text-[#0F2B46] font-bold">
+                                    <p className="uppercase text-xs tracking-widest text-slate-400 mb-1">Located At</p>
+                                    <p className="text-lg">84 Tania Crescent</p>
+                                    <p>Maple, ON L6A 2M8</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* Design-Build Philosophy */}
-            <div className="bg-stone-900 text-white py-24">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="max-w-3xl mx-auto text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-6">The Design-Build Advantage</h2>
-                        <p className="text-stone-400 text-lg leading-relaxed">
-                            Traditional construction often pits architects against contractors, leading to delays and budget overruns.
-                            At Artina, we unify the process. One team handles the design, the permits, and the build—ensuring
-                            single-point accountability and seamless execution.
-                        </p>
+            {/* Core Values with Hover Image Reveal */}
+            <div className="bg-[#f8fafc] py-24 relative overflow-hidden">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl md:text-4xl font-bold text-[#0F2B46] mb-4">Our Core Values</h2>
+                        <div className="w-24 h-1 bg-[#C5A059] mx-auto rounded-full" />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div className="bg-stone-800 p-8 rounded-xl border border-stone-700">
-                            <Users className="text-orange-500 mb-6" size={40} />
-                            <h3 className="text-xl font-bold mb-4">Unified Team</h3>
-                            <p className="text-stone-400">Architects, engineers, and trades working together under one roof from day one.</p>
-                        </div>
-                        <div className="bg-stone-800 p-8 rounded-xl border border-stone-700">
-                            <Clock className="text-orange-500 mb-6" size={40} />
-                            <h3 className="text-xl font-bold mb-4">Faster Delivery</h3>
-                            <p className="text-stone-400">Overlapping design and pre-construction phases significantly reduce overall project timelines.</p>
-                        </div>
-                        <div className="bg-stone-800 p-8 rounded-xl border border-stone-700">
-                            <ShieldCheck className="text-orange-500 mb-6" size={40} />
-                            <h3 className="text-xl font-bold mb-4">Cost Certainty</h3>
-                            <p className="text-stone-400">Design decisions are priced immediately, preventing "sticker shock" after plans are finalized.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* 5-Step Process */}
-            <div className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-16 text-center">Our Process</h2>
-                <div className="relative">
-                    {/* Vertical Line for Desktop */}
-                    <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-stone-200" />
-
-                    <div className="space-y-12">
-                        {processSteps.map((step, index) => (
+                        {coreValues.map((value, index) => (
                             <motion.div
-                                key={step.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
-                                className={`flex flex-col md:flex-row items-center justify-between ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
+                                key={index}
+                                onMouseEnter={() => setHoveredValue(index)}
+                                onMouseLeave={() => setHoveredValue(null)}
+                                className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center hover:translate-y-[-5px] transition-transform duration-300 relative z-20 cursor-default"
                             >
-                                <div className="w-full md:w-5/12" />
-                                <div className="z-10 bg-orange-600 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl shadow-lg border-4 border-white my-4 md:my-0">
-                                    {step.id}
+                                <div className="w-16 h-16 bg-[#0F2B46] rounded-full flex items-center justify-center mx-auto mb-6 transition-transform duration-300 group-hover:scale-110">
+                                    <value.icon className="text-white" size={32} />
                                 </div>
-                                <div className="w-full md:w-5/12 bg-stone-50 p-8 rounded-xl border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
-                                    <h3 className="text-xl font-bold text-stone-900 mb-3">{step.title}</h3>
-                                    <p className="text-stone-600 leading-relaxed">{step.desc}</p>
-                                </div>
+                                <h3 className="text-xl font-bold text-[#0F2B46] mb-3">{value.title}</h3>
+                                <p className="text-slate-600">{value.description}</p>
                             </motion.div>
                         ))}
                     </div>
                 </div>
+
+                {/* Floating Image Reveal */}
+                {coreValues.map((value, index) => (
+                    <motion.div
+                        key={index}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{
+                            opacity: hoveredValue === index ? 0.15 : 0,
+                            scale: hoveredValue === index ? 1 : 0.8,
+                            x: hoveredValue === index ? (index === 0 ? '-20%' : index === 2 ? '20%' : '0%') : 0
+                        }}
+                        transition={{ duration: 0.4 }}
+                        className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center"
+                    >
+                        <img
+                            src={value.image}
+                            alt={value.title}
+                            className="w-full h-full object-cover sm:w-[500px] sm:h-[500px] rounded-full blur-sm"
+                        />
+                    </motion.div>
+                ))}
             </div>
 
-            {/* Why Choose Us */}
-            <div className="bg-stone-50 py-24">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-4">Why Property Owners Choose Us</h2>
-                        <p className="text-stone-500 max-w-2xl mx-auto">We bring a professional management approach to an industry often plagued by uncertainty.</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {[
-                            { title: 'Licensed & Insured', desc: 'Fully licensed builder with comprehensive liability coverage.', icon: ShieldCheck },
-                            { title: 'Permit Experts', desc: 'We handle all municipal red tape and zoning applications.', icon: FileText },
-                            { title: 'Transparent Billing', desc: 'Detailed invoices and change orders. No hidden costs.', icon: LayoutTemplate },
-                            { title: 'Safety First', desc: 'References available. Strict WSIB compliance and site safety.', icon: HardHat }
-                        ].map((item, i) => (
-                            <div key={i} className="bg-white p-8 rounded-xl border border-stone-100 shadow-sm">
-                                <item.icon className="text-stone-800 mb-4" size={32} />
-                                <h4 className="font-bold text-stone-900 mb-2">{item.title}</h4>
-                                <p className="text-sm text-stone-500 leading-relaxed">{item.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
-            {/* CTA Section */}
-            <div className="bg-stone-900 py-20 bg-[url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat relative">
-                <div className="absolute inset-0 bg-stone-900/90" />
-                <div className="relative max-w-4xl mx-auto px-4 text-center z-10">
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Build with Confidence?</h2>
-                    <p className="text-stone-300 text-lg mb-8 max-w-2xl mx-auto">
-                        If you are planning a significant construction project and value structural expertise and professional management, we want to hear from you.
-                    </p>
-                    <div className="flex justify-center">
-                        <Link to="/contact">
-                            <LiquidMetalButton
-                                size="lg"
-                                icon={<ArrowRight className="w-5 h-5" />}
-                                metalConfig={{ colorBack: '#ea580c', colorTint: '#fb923c' }}
-                                className="font-bold text-lg"
-                            >
-                                Schedule Your Consultation
-                            </LiquidMetalButton>
-                        </Link>
-                    </div>
+            {/* CTA */}
+            <div className="bg-[#0F2B46] py-20 text-center">
+                <div className="max-w-4xl mx-auto px-4">
+                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-8">Work With The Best</h2>
+                    <Link to="/contact">
+                        <LiquidMetalButton
+                            size="lg"
+                            metalConfig={{ colorBack: '#C5A059', colorTint: '#eab308' }}
+                            className="font-bold text-[#0F2B46]"
+                        >
+                            Get Started
+                        </LiquidMetalButton>
+                    </Link>
                 </div>
             </div>
         </div>
